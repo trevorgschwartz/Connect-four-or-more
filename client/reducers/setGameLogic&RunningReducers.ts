@@ -91,3 +91,33 @@ export const setWinningPiecesReducer = (state = null, action: AppActions): numbe
             return state
     }
 }
+
+export const setNoClickingForOneSecondReducer = (state = false, action: AppActions): boolean => {
+    switch (action.type) {
+        case actions.setNoClickingForOneSecond:
+            return action.clickOrNot
+
+        default:
+            return state
+    }
+}
+
+export const setNumOfPlaysReducer = (state = 0, action: AppActions): number => {
+    switch (action.type) {
+        case actions.setNumOfPlays:
+            return action.number
+        
+        default:
+            return state
+    }
+}
+
+export const setDropPiecesOffBoard = (state = 0, action: AppActions): number => {
+    switch (action.type) {
+        case actions.setDropPiecesOffBoard:
+            return action.setting
+
+        default:
+            return state
+    }
+}

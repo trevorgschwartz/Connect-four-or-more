@@ -32,7 +32,7 @@ const PlayerInput = () => {
           <input type="text" className="LatoText" value={playerTwo[0]} onChange={(e: ChangeEvent<HTMLInputElement>) => dispatch(setPlayerTwo([e.target.value, 'Black']))} />
         <label >Win Amount</label>
           <input className="LatoText" type="number" min="2" max="6" value={amountToWin} onChange={(e: ChangeEvent<HTMLInputElement>) => dispatch(setAmountToWin(e.target.value))} />
-        <input type="submit" className="LatoText"/>
+        <input type="submit" className="LatoText localFormSubmit"/>
       </form>
         <button className=" playOnline LatoText" onClick={handleOnlineClick}>Play Online</button>
     </div>

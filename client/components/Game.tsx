@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FunctionComponent } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setBoard, setGameWon, setPlayerOne, setPlayerTwo, setAmountToWin, setView, setWinningPieces, setPlayerTurn, agreeToResetGame, setResetApproval, setOtherOnlinePlayerName, setLocalPlayer, setRecievedOnlineColumnClicked, setPlayingOnlineOrNot, setSecondPlayerRoomCode, setRoomCode } from '../actions/index'
+import { setBoard, setGameWon, setPlayerOne, setPlayerTwo, setAmountToWin, setView, setWinningPieces, setPlayerTurn, agreeToResetGame, setResetApproval, setOtherOnlinePlayerName, setLocalPlayer, setRecievedOnlineColumnClicked, setPlayingOnlineOrNot, setSecondPlayerRoomCode, setRoomCode, setNoClickingForOneSecond, setNumOfPlays, setDropPiecesOffBoard } from '../actions/index'
 import { AppState } from '../index'
 import Rows from './Rows'
 import socket from '../utilities/socketConnection'
@@ -9,10 +9,9 @@ import { changePlayerTurn, copyBoardAndPlacePiece, emptyBoard } from '../utiliti
 const Game: FunctionComponent = () => {
 
   const [toCheck, setToCheck] = useState([0, 0])
-  const [numOfPlays, setNumOfPlays] = useState(0)
   const [newBoardClicked, setNewBoardClicked] = useState(0)
   const [changeTurnsDisabled, setChangeTurnsDisabled] = useState(0)
-  const [dropPieces, setDropPieces] = useState(0)
+  const [resetRulesClickedOnce, setResetRulesClickedOnce] = useState(false)
   
   const winningPieces: number[][] = useSelector((state: AppState) => state.winningPieces)
   const amountToWin: string = useSelector((state: AppState) => state.amountToWin)
@@ -28,6 +27,7 @@ const Game: FunctionComponent = () => {
   const localPlayer: string[] | string = useSelector((state: AppState) => state.localPlayer)
   const resetApproval: number = useSelector((state: AppState) => state.resetApproval)
   const otherPlayer: string[] = useSelector((state: AppState) => state.otherPlayer)
+  const numOfPlays: number = useSelector((state: AppState) => state.numOfPlays)
 
   const dispatch = useDispatch()
 
@@ -75,7 +75,7 @@ const Game: FunctionComponent = () => {
           dispatch(setBoard(copyBoardAndPlacePiece(board, playerTurn, column, i)))
           dispatch(setPlayerTurn(changePlayerTurn(playerTurn, playerOne, playerTwo)))
           setToCheck([i, column])
-          setNumOfPlays(numOfPlays + 1)
+          dispatch(setNumOfPlays(numOfPlays + 1))
           break;
         }
       }
@@ -202,16 +202,22 @@ const Game: FunctionComponent = () => {
   }
 
   const resetBoard = (player: string[] = playerOne) => {
+    dispatch(setNoClickingForOneSecond(true))
+    setTimeout(() => {
+      return dispatch(setNoClickingForOneSecond(false))
+    }, 1000)
     dispatch(setPlayerTurn(player))
-    setDropPieces(3)
+    dispatch(setDropPiecesOffBoard(3))
 
     setTimeout(() => {
-      setDropPieces(0)
+      //TODO: change this dispatch
+      dispatch(setDropPiecesOffBoard(0))
       return dispatch(setBoard(emptyBoard))
+      
     }, 1000)
 
     dispatch(setGameWon([false, '']))
-    setNumOfPlays(0)
+    dispatch(setNumOfPlays(0))
     setNewBoardClicked(3)
     dispatch(setWinningPieces(null))
     dispatch(agreeToResetGame(''))
@@ -238,24 +244,33 @@ const Game: FunctionComponent = () => {
     }
   }
 
-  const handleResetGame = () => {
-    dispatch(setBoard(emptyBoard))
-    dispatch(setGameWon([false, '']))
-    dispatch(setPlayerOne(''))
-    dispatch(setPlayerTwo(''))
-    dispatch(setAmountToWin(''))
-    dispatch(setView('input'))
-    setNumOfPlays(0)
-    dispatch(setWinningPieces(null))
-    dispatch(setOtherOnlinePlayerName(''))
-    dispatch(setResetApproval(0))
-    dispatch(agreeToResetGame(''))
-    dispatch(setLocalPlayer(''))
-    dispatch(setPlayerTurn(''))
-    dispatch(setRecievedOnlineColumnClicked(null))
-    dispatch(setPlayingOnlineOrNot(false))
-    dispatch(setRoomCode(''))
-    dispatch(setSecondPlayerRoomCode(''))
+  const handleResetRulesClick = () => {
+    if (resetRulesClickedOnce) {
+      dispatch(setBoard(emptyBoard))
+      dispatch(setGameWon([false, '']))
+      dispatch(setPlayerOne(''))
+      dispatch(setPlayerTwo(''))
+      dispatch(setAmountToWin(''))
+      dispatch(setView('input'))
+      dispatch(setNumOfPlays(0))
+      dispatch(setWinningPieces(null))
+      dispatch(setOtherOnlinePlayerName(''))
+      dispatch(setResetApproval(0))
+      dispatch(agreeToResetGame(''))
+      dispatch(setLocalPlayer(''))
+      dispatch(setPlayerTurn(''))
+      dispatch(setRecievedOnlineColumnClicked(null))
+      dispatch(setPlayingOnlineOrNot(false))
+      dispatch(setRoomCode(''))
+      dispatch(setSecondPlayerRoomCode(''))
+      setResetRulesClickedOnce(false)
+    } else {
+      setResetRulesClickedOnce(true)
+    }
+  }
+
+  const handleCancelResetRulesClick = () => {
+    setResetRulesClickedOnce(false)
   }
 
   const handleAnimationEnd = () => {
@@ -292,20 +307,22 @@ const Game: FunctionComponent = () => {
         { gameWon[0] && numOfPlays === 42 && <span className="vh LatoText">Tie Game!</span>}
         { gameWon[0] && numOfPlays !== 42 && <span className="vh LatoText">{`${gameWon[1][0]} wins!`}</span> }
         { resetApproval === 0 ?
-          <button onClick={handleBoardResetClick}  className="button1 robotoText">Reset Board</button>
+          <button onClick={handleBoardResetClick}  className="button1 LatoText2">Reset Board</button>
           : resetApproval === 1 && localPlayer[0] === agreeToReset ?
-          <button onClick={handleBoardResetClick}  className="button1 robotoText">Waiting...</button>
+          <button onClick={handleBoardResetClick}  className="button1 LatoText2">Waiting...</button>
           : resetApproval === 1 && localPlayer[0] !== agreeToReset ?
-          <button onClick={handleBoardResetClick}  className="button1 robotoText">{otherPlayer[0]} requests Reset</button>
+          <button onClick={handleBoardResetClick}  className="button1 LatoText2">{otherPlayer[0]} requests Reset</button>
           : null
         }
-        <button onClick={handleResetGame} className="button2 robotoText">Reset Rules</button>
-        <button onClick={handleChangeTurnsClick} className="button3 robotoText" id='buttonTransparency' data-changeTurnsDisabled={changeTurnsDisabled}>Change Turns</button>
+        <button onClick={handleChangeTurnsClick} className="button2 LatoText2" id='buttonTransparency' data-changeTurnsDisabled={changeTurnsDisabled}>Change Turns</button>
+        { !resetRulesClickedOnce && <button onClick={handleResetRulesClick} className="button3 LatoText2">Reset Rules</button> }
+        { resetRulesClickedOnce && <button onClick={handleCancelResetRulesClick} className="button3 LatoText2">Cancel Rules Reset</button> }
+        { resetRulesClickedOnce && <button onClick={handleResetRulesClick} className="button4 LatoText2">Confirm Reset?</button> }
       </div>
       <div className='div'></div>
       <div className='container'>
         <div className="board" data-newboardclicked={newBoardClicked} onAnimationEnd={handleAnimationEnd}>
-          { board.map((row, i) => <Rows key={i} row={row} placePiece={placePiece} dropPieces={dropPieces} setDropPieces={setDropPieces}/>) }
+          { board.map((row, i) => <Rows key={i} row={row} placePiece={placePiece} />) }
           </div>
       </div>
   </>

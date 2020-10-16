@@ -8,7 +8,10 @@ import {
     setOnlineRerenderCounterReducer,
     setAgreementToResetReducer,
     setResetApprovalReducer,
-    setWinningPiecesReducer
+    setWinningPiecesReducer,
+    setNoClickingForOneSecondReducer,
+    setNumOfPlaysReducer,
+    setDropPiecesOffBoard
 } from './setGameLogic&RunningReducers'
 
 import {
@@ -46,7 +49,10 @@ const rootReducer = combineReducers({
     localPlayer: setLocalPlayer,
     agreeToReset: setAgreementToResetReducer,
     resetApproval: setResetApprovalReducer,
-    otherPlayer: setOtherOnlinePlayerNameReducer
+    otherPlayer: setOtherOnlinePlayerNameReducer,
+    noClickingForOneSecond: setNoClickingForOneSecondReducer,
+    numOfPlays: setNumOfPlaysReducer,
+    dropPiecesOffBoard: setDropPiecesOffBoard
 })
 
 export default rootReducer

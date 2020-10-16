@@ -94,7 +94,7 @@ export const agreeToResetGame = (player: string): AppActions => ({
     player
 })
 
-export const setResetApproval = (number: number) : AppActions => ({
+export const setResetApproval = (number: number): AppActions => ({
     type: actions.setResetApproval,
     number
 })
@@ -102,4 +102,19 @@ export const setResetApproval = (number: number) : AppActions => ({
 export const setOtherOnlinePlayerName = (player: string[] | string): AppActions => ({
     type: actions.setOtherOnlinePlayerName,
     player
+})
+
+export const setNoClickingForOneSecond = (clickOrNot: boolean): AppActions => ({
+    type: actions.setNoClickingForOneSecond,
+    clickOrNot
+})
+
+export const setNumOfPlays = (number: number): AppActions => ({
+    type: actions.setNumOfPlays,
+    number
+})
+
+export const setDropPiecesOffBoard = (setting: number): AppActions => ({
+    type: actions.setDropPiecesOffBoard,
+    setting
 })

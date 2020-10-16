@@ -100,6 +100,21 @@ interface SetOtherOnlinePlayerName {
     player: string[] | string
 }
 
+interface SetNoClickingForOneSecond {
+    type: typeof actions.setNoClickingForOneSecond
+    clickOrNot: boolean
+}
+
+interface SetNumOfPlays {
+    type: typeof actions.setNumOfPlays
+    number: number
+}
+
+interface SetDropPiecesOffBoard {
+    type: typeof actions.setDropPiecesOffBoard
+    setting: number
+}
+
 export type AppActions = 
 HelloWorldAction | 
 SetViewAction | 
@@ -120,4 +135,7 @@ SetPlayerTurn |
 SetLocalPlayer |
 SetAgreementToReset |
 SetResetApproval |
-SetOtherOnlinePlayerName
+SetOtherOnlinePlayerName |
+SetNoClickingForOneSecond |
+SetNumOfPlays |
+SetDropPiecesOffBoard

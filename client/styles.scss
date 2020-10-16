@@ -129,6 +129,11 @@
     grid-row-start: 5;
   }
 
+  .localFormSubmit {
+    grid-row-start: 4;
+    grid-column-start: 2
+  }
+
   .createGameButton {
     grid-column-start: 1
   }
@@ -271,6 +276,12 @@
     height: 11vmin;
     grid-column-start: 4
   }
+
+  .button4 {
+    width: 20vmin;
+    height: 11vmin;
+    grid-column-start: 5
+  }
   
   .vh {
     text-align: left
@@ -289,6 +300,12 @@
   .LatoText {
     font-family: 'Lato', serif;
     font-size: 4vmin;
+    text-shadow: .15vmin .15vmin grey;
+  }
+  
+  .LatoText2 {
+    font-family: 'Lato', serif;
+    font-size: 3vmin;
     text-shadow: .15vmin .15vmin grey;
   }
   
