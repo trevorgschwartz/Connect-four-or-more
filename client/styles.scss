@@ -1,0 +1,349 @@
+// * {
+//   margin: 0;
+//   padding: 0;
+//   font-size: 100%;
+// }
+
+.title {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  justify-items: left;
+  align-items: left;
+}
+
+.namesAndColor {
+  font-family: 'Lato', serif;
+  font-size: 8vmin;
+}
+
+.circleToBottom {
+  top: 2vmin
+}
+
+.circleRedAtTop {
+  border-radius: 50%;
+  width: 7vmin;
+  height: 7vmin;
+  background-color: red;
+  position: absolute;
+}
+
+// .circleTurn {
+//   margin-bottom: -10px;
+// }
+
+.banner2 {
+  display: grid;
+  // grid-template-columns: minmax(5vmin, 1fr) repeat(3, minmax(2vmin, 1fr));
+  grid-template-rows: 1;
+  grid-template-columns: repeat(5, minmax(0, 20%));
+  grid-gap: 2em;
+  justify-items: center;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 6fr 1fr;
+    justify-items: center;
+    align-items: center;
+  }
+
+  // .boardDiv {
+  //   justify-items: center;
+  //   align-items: center;
+  // }
+  
+  .board {
+    // width: 74vmin;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, minmax(9vmin, 1fr));
+    justify-items: center;
+    align-items: center;
+    grid-gap: 1.5vmin;
+    background-color: #3333FF;
+    padding: 2vmin;
+  }
+  
+  .board[data-newBoardClicked='0'] {
+    animation-name: start-animation;
+    animation-duration: 1000ms;
+  }
+  
+  .board[data-newBoardClicked='2'] {
+    animation-name: newBoard-animation;
+    animation-duration: 1500ms;
+  }
+  .board[data-newBoardClicked='3'] {
+    animation-name: shake;
+    animation-duration: 800ms;
+  }
+  
+  .row {
+    display: inline-grid;
+    grid-template-columns: repeat(7, minmax(5vmin, 1fr));
+    grid-template-rows: 1fr;
+    justify-items: center;
+    align-items: center;
+    grid-gap: 1.5vmin;
+  
+  
+  }
+
+ 
+
+  #buttonTransparency[data-changeTurnsDisabled = '1'] {
+    opacity: 40%
+  }
+
+  .inputs {
+    display: grid;
+    grid-template-rows: repeate(1, 48%);
+    grid-gap: 1.8em;
+  }
+
+  .banner1 {
+    display: grid;
+    grid-template-rows: repeat(4, minmax(1vmin, 1fr));
+    grid-template-columns: 20% 20%;
+    grid-gap: 1em;
+    // justify-content: space-evenly;
+  }
+
+  .onlineBanner {
+    display: grid;
+    grid-template-rows: repeat(5, minmax(1vmin, 1fr));
+    grid-template-columns: 20% 20% 20%;
+    grid-gap: 1.8em;
+  }
+
+  .playOnline {
+    grid-row-start: 2;
+    width: 20%
+  }
+
+  .playLocallyButton {
+    grid-row-start: 5;
+  }
+
+  .createGameButton {
+    grid-column-start: 1
+  }
+
+  .joinGameButton {
+    grid-column-start: 1
+  }
+
+  .createOrJoinGamePlayerName {
+      grid-row-start: 1;
+      grid-column-start: 2;
+      text-align: right;
+  }
+
+  .joinGameEnterGameCodeText {
+    grid-row-start: 2;
+    grid-column-start: 2;
+    text-align: right
+  }
+
+  .joinGameEnterGameCodeInput {
+    grid-row-start: 2;
+    grid-column-start: 3;
+  }
+
+  .createOrJoinGameNameInput {
+    grid-row-start: 1;
+    grid-column-start: 3
+  }
+
+  .createGameWinAmountLabel {
+    grid-row-start: 2;
+    grid-column-start: 2;
+    text-align: right;
+  }
+
+  .createGameWinAmountInput {
+    grid-row-start: 2;
+    grid-column-start: 3;
+  }
+
+  .createOrJoinGameSubmitButton {
+    grid-row-start: 3;
+    grid-column-start: 3;
+  }
+
+  .createGameGameCodeNotice {
+    grid-row-start: 1;
+    grid-column-start: 2;
+    text-align: right;
+  }
+
+  .createGameGameCode {
+    grid-row-start: 1;
+    grid-column-start: 3;
+  }
+
+  .startGameCreateGame {
+    grid-row-start: 2;
+    grid-column-start: 3;
+  }
+
+  .createOrJoinInput {
+    grid-column-start: 3
+  }
+
+  .circleRed {
+    border-radius: 50%;
+    width: 9vmin;
+    height: 9vmin;
+    background-color: red;
+    position: absolute;
+  }
+  
+  .circleRed[data-droppieces='0'] {
+    animation-name: fall-animation;
+    animation-duration: 1000ms;
+  }
+  
+  .circleRed[data-droppieces='3'] {
+    animation-name: newBoard-fall-animation;
+    animation-duration: 1200ms;
+  }
+  
+  .circleBlack {
+    border-radius: 50%;
+    width: 9vmin;
+    height: 9vmin;
+    background-color: black;
+    position: absolute;
+  
+  }
+  
+  .circleBlack[data-droppieces='0'] {
+    animation-name: fall-animation;
+    animation-duration: 1000ms;
+  }
+  
+  .circleBlack[data-droppieces='3'] {
+    animation-name: newBoard-fall-animation;
+    animation-duration: 1200ms;
+  }
+  
+  .circleYellow {
+    border-radius: 50%;
+    width: 9vmin;
+    height: 9vmin;
+    background-color: yellow;
+    position: absolute;
+    z-index: 1;
+  }
+  
+  .circleYellow[data-droppieces='3'] {
+    animation-name: newBoard-fall-animation;
+    animation-duration: 1200ms;
+  }
+  
+  .circleWhite {
+    border-radius: 50%;
+    width: 9vmin;
+    height: 9vmin;
+    background-color: white;
+  
+  }
+  
+  .button1 {
+    width: 20vmin;
+    height: 11vmin;
+    grid-column-start: 2
+  }
+  
+  .button2 {
+    width: 20vmin;
+    height: 11vmin;
+    grid-column-start: 3
+  }
+  
+  .button3 {
+    width: 20vmin;
+    height: 11vmin;
+    grid-column-start: 4
+  }
+  
+  .vh {
+    text-align: left
+  }
+  
+  .connect {
+    font-family: 'Righteous', serif;
+    font-size: 15vmin
+  }
+  
+  .connect4 {
+    font-family: 'Righteous', serif;
+    font-size: 18vmin;
+  }
+  
+  .LatoText {
+    font-family: 'Lato', serif;
+    font-size: 4vmin;
+    text-shadow: .15vmin .15vmin grey;
+  }
+  
+  .LatoTextWin {
+    font-family: 'Lato', serif;
+    font-size: 7vmin;
+    text-shadow: .15vmin .15vmin grey;
+  }
+  
+  @keyframes fall-animation {
+    from {
+        transform: translateY(-100vmin);
+    }
+    to {
+        transform: translateY(0);
+    }
+  }
+  
+  @keyframes start-animation {
+    from {
+        transform: translateX(-120vmin) rotate(240deg);
+    }
+    to {
+        transform: translateX(0) rotate(0);
+    }
+  }
+  
+  @keyframes newBoard-animation {
+    from {
+        transform:  rotateY(100deg);
+    }
+    to {
+        transform: rotateY(0);
+    }
+  }
+  
+  @keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+  }
+  
+  @keyframes newBoard-fall-animation {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(100vh);
+    }
+  }
