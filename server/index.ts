@@ -75,6 +75,7 @@ io.on('connection', (socket) => {
             if (!Object.keys(rooms[row[0]]['users']).length) delete rooms[row[0]];
           }
         });
+      });
   });
 
 server.listen(PORT, () => console.log('Server is listening... '));
