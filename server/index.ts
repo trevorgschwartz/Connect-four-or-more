@@ -27,7 +27,7 @@ io.on('connection', (socket) => {
 
         !rooms.hasOwnProperty(roomCode) ? rooms[roomCode] = {} : null
 
-        rooms[roomCode]['users'] ? (rooms[roomCode]['users'][socket.id] = true) : (rooms[roomCode]['users'] = { [socket.id]: true });
+        rooms[roomCode]['users'] ? (rooms[roomCode]['users'][socket.id] = 'playerOne') : (rooms[roomCode]['users'] = { [socket.id]: 'playerTwo' });
         rooms[roomCode]['names'] = { playerOne : playerName }
         rooms[roomCode]['amountToWin'] = amountToWin
     });
@@ -36,7 +36,7 @@ io.on('connection', (socket) => {
 
         socket.join(roomCode)
         
-        rooms[roomCode]['users'][socket.id] = true
+        rooms[roomCode]['users'][socket.id] = 'playerTwo'
         rooms[roomCode]['names'].playerTwo = playerName
         socket.to(roomCode).emit('second-player-joined', rooms[roomCode]['names'].playerOne, playerName, roomCode)
     })
@@ -64,6 +64,17 @@ io.on('connection', (socket) => {
     socket.on('cancel-agree-to-reset', (roomCode)=> {
         socket.to(roomCode).broadcast.emit('cancel-agree-to-reset-to-other-player')
     })
+
+    socket.on('disconnect', () => {
+        Object.entries(rooms).forEach((row: any) => {
+          if (!!row[1]['users'][socket.id]) {
+            socket.to(row[0]).broadcast.emit('user-left-room');
+            if (row[1]['users'][socket.id] === 'playerOne') delete rooms[row[0]]['names']['playerOne']
+            else delete rooms[row[0]]['names']['playerTwo'] 
+            delete rooms[row[0]]['users'][socket.id];
+            if (!Object.keys(rooms[row[0]]['users']).length) delete rooms[row[0]];
+          }
+        });
   });
 
 server.listen(PORT, () => console.log('Server is listening... '));

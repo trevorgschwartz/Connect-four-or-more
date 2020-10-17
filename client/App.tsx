@@ -43,14 +43,13 @@ const App: React.FC = () => {
     })
 
     socket.on('change-turns', (playerOne: string[], playerTwo: string[]) => {
-        console.log("change-turns hit")
         let copyPlayerOne = playerOne.slice()
         dispatch(setPlayerOne(playerTwo.slice()))
         dispatch(setPlayerTwo(copyPlayerOne))
     })
 
     return () => {
-        socket.disconnect;
+        socket.disconnect()
     }
   }, []) 
         

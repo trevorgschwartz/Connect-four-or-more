@@ -12,6 +12,7 @@ const Game: FunctionComponent = () => {
   const [newBoardClicked, setNewBoardClicked] = useState(0)
   const [changeTurnsDisabled, setChangeTurnsDisabled] = useState(0)
   const [resetRulesClickedOnce, setResetRulesClickedOnce] = useState(false)
+  const [userLeftGame, setUserLeftGame] = useState(false)
   
   const winningPieces: number[][] = useSelector((state: AppState) => state.winningPieces)
   const amountToWin: string = useSelector((state: AppState) => state.amountToWin)
@@ -49,6 +50,14 @@ const Game: FunctionComponent = () => {
       dispatch(agreeToResetGame(''))
       dispatch(setResetApproval(0))
     })
+
+    socket.on('user-left-room', () => {
+      setUserLeftGame(true)
+    })
+    
+    return () => {
+      socket.disconnect()
+  }
   },[])
 
   useEffect(() => {
@@ -215,7 +224,6 @@ const Game: FunctionComponent = () => {
     dispatch(setDropPiecesOffBoard(3))
 
     setTimeout(() => {
-      //TODO: change this dispatch
       dispatch(setDropPiecesOffBoard(0))
       return dispatch(setBoard(emptyBoard))
       
@@ -273,6 +281,7 @@ const Game: FunctionComponent = () => {
       dispatch(setRoomCode(''))
       dispatch(setSecondPlayerRoomCode(''))
       setResetRulesClickedOnce(false)
+      setUserLeftGame(false)
     } else {
       setResetRulesClickedOnce(true)
     }
@@ -299,19 +308,22 @@ const Game: FunctionComponent = () => {
     }
   }
 
-  const renderPlayerTurnAndCircle = () => {
-    return (
-        <div>
-          <div className="vh LatoText">{`${playerTurn[0]}'s turn`}</div>
-          <div className={`circle${playerTurn[1]} vh`}></div>
-        </div> 
-    )
-  }
-
   return (
   <>
       <div className="banner2">
-        { !gameWon[0] && renderPlayerTurnAndCircle()}
+        { !gameWon[0] && !userLeftGame ? 
+          <div>
+            <div className="vh LatoText">{`${playerTurn[0]}'s turn`}</div>
+            <div className={`circle${playerTurn[1]} vh`}></div>
+          </div>
+        :
+        !gameWon[0] && userLeftGame ?
+          <div>
+            <div className="vh LatoText">{`${otherPlayer[0]} left the game`}</div>
+            <div className={`circle${otherPlayer[1]} vh`}></div>
+          </div> 
+        : null
+        }
         { gameWon[0] && numOfPlays === 42 && <span className="vh LatoText">Tie Game!</span>}
         { gameWon[0] && numOfPlays !== 42 && <span className="vh LatoText">{`${gameWon[1][0]} wins!`}</span> }
         { resetApproval === 0 ?
