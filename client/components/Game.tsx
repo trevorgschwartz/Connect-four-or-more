@@ -44,6 +44,11 @@ const Game: FunctionComponent = () => {
         resetBoard(player1)
       }
     })
+
+    socket.on('cancel-agree-to-reset-to-other-player', () => {
+      dispatch(agreeToResetGame(''))
+      dispatch(setResetApproval(0))
+    })
   },[])
 
   useEffect(() => {
@@ -237,6 +242,10 @@ const Game: FunctionComponent = () => {
         } else if (agreeToReset !== localPlayer[0] && numOfPlays) {
           socket.emit('reset-unfinished-board', localPlayer, agreeToReset, playerOne, roomCode || secondPlayerRoomCode)
           resetBoard()
+        } else if (agreeToReset === localPlayer[0] && numOfPlays) {
+          socket.emit('cancel-agree-to-reset', roomCode || secondPlayerRoomCode)
+          dispatch(agreeToResetGame(''))
+          dispatch(setResetApproval(0))
         }
       }
     } else {
@@ -285,7 +294,6 @@ const Game: FunctionComponent = () => {
       dispatch(setPlayerOne(playerTwo.slice()))
       dispatch(setPlayerTwo(copyPlayerTurn))
       if (playingOnlineOrNot) {
-        console.log("socket emit hit")
         socket.emit('change-turns', roomCode || secondPlayerRoomCode, playerOne, playerTwo)
       }
     }
@@ -309,15 +317,15 @@ const Game: FunctionComponent = () => {
         { resetApproval === 0 ?
           <button onClick={handleBoardResetClick}  className="button1 LatoText2">Reset Board</button>
           : resetApproval === 1 && localPlayer[0] === agreeToReset ?
-          <button onClick={handleBoardResetClick}  className="button1 LatoText2">Waiting...</button>
+          <button onClick={handleBoardResetClick}  className="button1 LatoText2">Waiting...Click To Cancel</button>
           : resetApproval === 1 && localPlayer[0] !== agreeToReset ?
-          <button onClick={handleBoardResetClick}  className="button1 LatoText2">{otherPlayer[0]} requests Reset</button>
+          <button onClick={handleBoardResetClick}  className="button1 LatoText2">{otherPlayer[0]} requested Reset</button>
           : null
         }
         <button onClick={handleChangeTurnsClick} className="button2 LatoText2" id='buttonTransparency' data-changeTurnsDisabled={changeTurnsDisabled}>Change Turns</button>
         { !resetRulesClickedOnce && <button onClick={handleResetRulesClick} className="button3 LatoText2">Reset Rules</button> }
         { resetRulesClickedOnce && <button onClick={handleCancelResetRulesClick} className="button3 LatoText2">Cancel Rules Reset</button> }
-        { resetRulesClickedOnce && <button onClick={handleResetRulesClick} className="button4 LatoText2">Confirm Reset?</button> }
+        { resetRulesClickedOnce && <button onClick={handleResetRulesClick} className="button4 LatoText2">Confirm Rules Reset?</button> }
       </div>
       <div className='div'></div>
       <div className='container'>
