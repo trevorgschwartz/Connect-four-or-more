@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { setRoomCode, setView } from '../actions/index'
+import React, { useState, useEffect, FunctionComponent } from 'react'
+import { useSelector } from 'react-redux'
 import { AppState } from '../index'
 import CreateGameEnterName from './CreateGameEnterName'
 import socket from '../utilities/socketConnection'
 import CreateGameRoomCode from './CreateGameRoomCode'
 
-const CreateOnlineGame = () => {
+const CreateOnlineGame: FunctionComponent = () => {
     
     const [createGameView, setCreateGameView] = useState('enterName')
 

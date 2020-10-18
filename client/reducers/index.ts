@@ -1,4 +1,7 @@
-import { combineReducers } from 'redux'
+import { combineReducers, Reducer } from 'redux'
+import * as actions from '../types/actionStrings'
+import { AppActions } from '../types/actions'
+import { AppState } from '../index'
 
 import { 
     setAmountToWinReducer,
@@ -32,7 +35,7 @@ import {
 } from './setRoomCodesReducers'
 
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
     view: setViewReducer,
     amountToWin: setAmountToWinReducer,
     playerOne: setPlayerOneReducer,
@@ -54,5 +57,11 @@ const rootReducer = combineReducers({
     numOfPlays: setNumOfPlaysReducer,
     dropPiecesOffBoard: setDropPiecesOffBoard
 })
+
+const rootReducer: Reducer = (state: AppState, action: AppActions): AppState => {   
+    if(action.type === actions.setDefaultReduxState) state = undefined
+    
+    return appReducer(state, action);
+ }
 
 export default rootReducer

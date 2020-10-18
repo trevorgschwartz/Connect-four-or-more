@@ -1,6 +1,5 @@
 import * as actions from '../types/actionStrings'
 import { AppActions } from '../types/actions'
-// import { Board } from '../types/index'
 
 export const addToHelloWorld = (newString: string): AppActions => ({
     type: actions.addToHelloWorld,
@@ -117,4 +116,8 @@ export const setNumOfPlays = (number: number): AppActions => ({
 export const setDropPiecesOffBoard = (setting: number): AppActions => ({
     type: actions.setDropPiecesOffBoard,
     setting
+})
+
+export const setDefaultReduxState = (): AppActions => ({
+    type: actions.setDefaultReduxState
 })

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, FormEvent, ChangeEvent } from 'react'
+import React, { FunctionComponent, } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { setAmountToWin, setPlayerOne, setLocalPlayer, setRoomCode } from '../actions/index'
 import { AppState } from '../index'
@@ -20,7 +20,7 @@ const CreateGameEnterName:FunctionComponent<LinkDispatchProps> = ({ setCreateGam
         dispatch(setLocalPlayer(playerOne))
         const newRoom = randomWords({ exactly: 2, join: '', maxLength: 4 });
         dispatch(setRoomCode(newRoom))
-        setCreateGameView('playGame')
+        setCreateGameView('getCode')
     }
     
     return (

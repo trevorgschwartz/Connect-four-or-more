@@ -18,16 +18,15 @@ type Props = LinkDispatchProp & LinkStateProp
 
 const Slot:FunctionComponent<Props> = ({ column, slot, placePiece }) => {
 
-  const {
-    playingOnlineOrNot,
-    receivedOnlineColumn,
-    onlineRerenderCounter,
-    roomCode,
-    secondPlayerRoomCode,
-    playerTurn,
-    localPlayer,
-    otherPlayer
-  } = useSelector((state: AppState) => state)
+  
+  const playingOnlineOrNot: boolean = useSelector((state: AppState) => state.playingOnlineOrNot)
+  const receivedOnlineColumn: number | null = useSelector((state: AppState) => state.receivedOnlineColumn)
+  const onlineRerenderCounter: number = useSelector((state: AppState) => state.onlineRerenderCounter)
+  const roomCode: string = useSelector((state: AppState) => state.roomCode)
+  const secondPlayerRoomCode: string = useSelector((state: AppState) => state.secondPlayerRoomCode)
+  const playerTurn: string[] = useSelector((state: AppState) => state.playerTurn)
+  const localPlayer: string[] = useSelector((state: AppState) => state.localPlayer)
+  const otherPlayer: string[] = useSelector((state: AppState) => state.otherPlayer)
   const noClickingForOneSecond: boolean = useSelector((state: AppState) => state.noClickingForOneSecond)
   const dropPiecesOffBoard: number = useSelector((state: AppState) => state.dropPiecesOffBoard)
 

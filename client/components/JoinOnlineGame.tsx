@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, FunctionComponent } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppState } from '../index'
 import { setPlayerTwo, setLocalPlayer, setSecondPlayerRoomCode, setView } from '../actions/index'
 
-const JoinOnlineGame = () => {
+const JoinOnlineGame: FunctionComponent = () => {
     const [localRoomCode, setLocalRoomCode] = useState('')
 
     const playerTwo: string[] | string = useSelector((state: AppState) => state.playerTwo)

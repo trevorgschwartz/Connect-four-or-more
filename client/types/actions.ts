@@ -115,6 +115,10 @@ interface SetDropPiecesOffBoard {
     setting: number
 }
 
+interface SetDefaultReduxState {
+    type: typeof actions.setDefaultReduxState
+}
+
 export type AppActions = 
 HelloWorldAction | 
 SetViewAction | 
@@ -138,4 +142,5 @@ SetResetApproval |
 SetOtherOnlinePlayerName |
 SetNoClickingForOneSecond |
 SetNumOfPlays |
-SetDropPiecesOffBoard
+SetDropPiecesOffBoard |
+SetDefaultReduxState

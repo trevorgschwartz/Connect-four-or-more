@@ -19,15 +19,16 @@ const io = socketIo(server)
 const rooms: any = {}
 let counter = 1
 
+
 io.on('connection', (socket) => {
     
     socket.on('create-room', (roomCode: string, playerName: string, amountToWin: string) => {
 
         socket.join(roomCode)
 
-        !rooms.hasOwnProperty(roomCode) ? rooms[roomCode] = {} : null
+        if (!rooms.hasOwnProperty(roomCode)) rooms[roomCode] = {}
 
-        rooms[roomCode]['users'] ? (rooms[roomCode]['users'][socket.id] = 'playerOne') : (rooms[roomCode]['users'] = { [socket.id]: 'playerTwo' });
+        rooms[roomCode]['users'] = { [socket.id]: 'playerOne' }
         rooms[roomCode]['names'] = { playerOne : playerName }
         rooms[roomCode]['amountToWin'] = amountToWin
     });

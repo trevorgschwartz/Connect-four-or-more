@@ -1,15 +1,13 @@
-import React, { ChangeEvent, FormEvent } from 'react'
+import React, { ChangeEvent, FormEvent, FunctionComponent } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { setAmountToWin, setPlayerOne, setPlayerTwo, setView, setPlayingOnlineOrNot } from '../actions/index'
 import { AppState } from '../index'
 
-const PlayerInput = () => {
+const PlayerInput: FunctionComponent = () => {
 
-  const {
-    playerOne,
-    playerTwo,
-    amountToWin
-  } = useSelector((state: AppState) => state)
+  const playerOne: string[] = useSelector((state: AppState) => state.playerOne)
+  const playerTwo: string[] = useSelector((state: AppState) => state.playerTwo)
+  const amountToWin: string = useSelector((state: AppState) => state.amountToWin)
   
   const dispatch = useDispatch()
 

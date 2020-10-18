@@ -1,10 +1,23 @@
 import React, { useState, useEffect, FunctionComponent } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setBoard, setGameWon, setPlayerOne, setPlayerTwo, setAmountToWin, setView, setWinningPieces, setPlayerTurn, agreeToResetGame, setResetApproval, setOtherOnlinePlayerName, setLocalPlayer, setRecievedOnlineColumnClicked, setPlayingOnlineOrNot, setSecondPlayerRoomCode, setRoomCode, setNoClickingForOneSecond, setNumOfPlays, setDropPiecesOffBoard } from '../actions/index'
 import { AppState } from '../index'
-import Rows from './Rows'
-import socket from '../utilities/socketConnection'
 import { changePlayerTurn, copyBoardAndPlacePiece, emptyBoard } from '../utilities/gameLogicUtilities'
+import { winDetection } from '../utilities/winDetection'
+import socket from '../utilities/socketConnection'
+import Rows from './Rows'
+import { 
+  setBoard,
+  setGameWon,
+  setPlayerOne,
+  setPlayerTwo,
+  setWinningPieces,
+  setPlayerTurn,
+  agreeToResetGame,
+  setResetApproval,
+  setNoClickingForOneSecond,
+  setNumOfPlays,
+  setDropPiecesOffBoard,
+  setDefaultReduxState } from '../actions/index'
 
 const Game: FunctionComponent = () => {
 
@@ -57,11 +70,17 @@ const Game: FunctionComponent = () => {
     
     return () => {
       socket.disconnect()
-  }
+    }
   },[])
 
   useEffect(() => {
-    winDetection(toCheck[0], toCheck[1])
+    let possibleWinningPieces = winDetection(toCheck[0], toCheck[1], board, amountToWin)
+    
+    if (possibleWinningPieces.length > 0) {
+      dispatch(setWinningPieces(possibleWinningPieces))
+      playerTurn === playerOne ? dispatch(setGameWon([true, playerTwo])) : dispatch(setGameWon([true, playerOne]))
+    }
+    
     if (numOfPlays === 42) dispatch(setGameWon([true, 'Tie']))
   }, [toCheck])
 
@@ -77,7 +96,7 @@ const Game: FunctionComponent = () => {
         winningPieces.forEach((piece: number[]) => {
           newBoard[piece[0]][piece[1]] = "Yellow"
         })
-        return dispatch(setBoard(newBoard))
+        dispatch(setBoard(newBoard))
       }, 1000)
     }
   }, [winningPieces])
@@ -95,146 +114,23 @@ const Game: FunctionComponent = () => {
       }
     }
   }
-
-  const checkLeftRight = (board: string[][], row: number, col: number) => {
-    let color = board[row][col]
-    let leftCheck = col
-    let rightCheck = col
-    let rightStillMatched = true
-    let leftStillMatched = true
-    let localWinningPieces = [[row, col]]
-    while (leftStillMatched || rightStillMatched) {
-      if (leftCheck > 0 && board[row][leftCheck - 1] === color && color !== 'O') {
-        leftCheck--
-        localWinningPieces.push([row, leftCheck])
-      } else leftStillMatched = false
-      
-      if (rightCheck < (board[0].length - 1) && board[row][rightCheck + 1] === color && color !== 'O') {
-        rightCheck++
-        localWinningPieces.push([row, rightCheck])
-      } else rightStillMatched = false
-      
-      if (localWinningPieces.length >= Number(amountToWin) && amountToWin !== '') {
-        return localWinningPieces
-      }
-    }
-    return []
-  }
-
-  const checkUpDown = (board: string[][], row: number, col: number) => {
-    let color = board[row][col]
-    let upCheck = row
-    let downCheck = row
-    let upStillMatched = true
-    let downStillMatched = true
-    let localWinningPieces = [[row, col]]
-    while (upStillMatched || downStillMatched) {
-      if (upCheck > 0 && board[upCheck - 1][col] === color && color !== 'O') {
-        upCheck--
-        localWinningPieces.push([upCheck, col])
-      } else upStillMatched = false
-      
-      if (downCheck < board.length - 1 && board[downCheck + 1][col] === color && color !== 'O') {
-        downCheck++
-        localWinningPieces.push([downCheck, col])
-      } else downStillMatched = false
-      
-      if (localWinningPieces.length >= Number(amountToWin) && amountToWin !== '') {
-        return localWinningPieces
-      }
-    }
-    return []
-  }
-
-  const checkMinorDiagonal = (board: string[][], row: number, col: number) => {
-    let color = board[row][col]
-    let topRightCheck = [row, col]
-    let bottomLeftCheck = [row, col]
-    let upRightStillMatched = true
-    let downLeftStillMatched = true
-    let localWinningPieces = [[row, col]]
-    while (upRightStillMatched || downLeftStillMatched) {
-      if (topRightCheck[0] > 0 && topRightCheck[1] < (board[0].length - 1) && board[topRightCheck[0] - 1][topRightCheck[1] + 1] === color && color !== 'O') {
-        topRightCheck = [topRightCheck[0] - 1, topRightCheck[1] + 1]
-        localWinningPieces.push([topRightCheck[0], topRightCheck[1]])
-      } else upRightStillMatched = false
-      
-      if (bottomLeftCheck[0] < (board.length - 1) && bottomLeftCheck[1] > 0 && board[bottomLeftCheck[0] + 1][bottomLeftCheck[1] - 1] === color && color !== 'O') {
-        bottomLeftCheck = [bottomLeftCheck[0] + 1, bottomLeftCheck[1] - 1]
-        localWinningPieces.push([bottomLeftCheck[0], bottomLeftCheck[1]])
-      } else downLeftStillMatched = false
-      
-      if (localWinningPieces.length >= Number(amountToWin) && amountToWin !== '') {
-        return localWinningPieces
-      }
-    }
-    return []
-  }
-
-  const checkMajorDiagonal = (board: string[][], row: number, col: number) => {
-    let color = board[row][col]
-    let topLeftCheck = [row, col]
-    let bottomRightCheck = [row, col]
-    let upLeftStillMatched = true
-    let downRightStillMatched = true
-    let localWinningPieces = [[row, col]]
-    while (upLeftStillMatched || downRightStillMatched) {
-      if (topLeftCheck[0] > 0 && topLeftCheck[1] > 0 && board[topLeftCheck[0] - 1][topLeftCheck[1] - 1] === color && color !== 'O') {
-        topLeftCheck = [topLeftCheck[0] - 1, topLeftCheck[1] - 1]
-        localWinningPieces.push([topLeftCheck[0], topLeftCheck[1]])
-      } else upLeftStillMatched = false
-      
-      if (bottomRightCheck[0] < (board.length - 1) && bottomRightCheck[1] < board[0].length - 1 && board[bottomRightCheck[0] + 1][bottomRightCheck[1] + 1] === color && color !== 'O') {
-        bottomRightCheck = [bottomRightCheck[0] + 1, bottomRightCheck[1] + 1]
-        localWinningPieces.push([bottomRightCheck[0], bottomRightCheck[1]])
-      } else downRightStillMatched = false
-      
-      if (localWinningPieces.length >= Number(amountToWin) && amountToWin !== '') {
-        return localWinningPieces
-      }
-    }
-    return []
-  }
-
-  const winDetection = (row: number, col: number) => {
-
-    let upDown = checkUpDown(board, row, col)
-    let leftRight = checkLeftRight(board, row, col)
-    let minorDial = checkMinorDiagonal(board, row, col)
-    let majorDial = checkMajorDiagonal(board, row, col)
-    const winPieces = upDown.concat(leftRight, minorDial, majorDial)
-    if (winPieces.length > 0) {
-      dispatch(setWinningPieces(winPieces))
-      let player
-        if (playerTurn === playerOne) {
-          player = playerTwo
-        } else {
-          player = playerOne
-        }
-        dispatch(setGameWon([true, player]))
-    }
-  }
-
+  
   const resetBoard = (player: string[] = playerOne) => {
     dispatch(setNoClickingForOneSecond(true))
-    setTimeout(() => {
-      return dispatch(setNoClickingForOneSecond(false))
-    }, 1000)
     dispatch(setPlayerTurn(player))
     dispatch(setDropPiecesOffBoard(3))
-
-    setTimeout(() => {
-      dispatch(setDropPiecesOffBoard(0))
-      return dispatch(setBoard(emptyBoard))
-      
-    }, 1000)
-
     dispatch(setGameWon([false, '']))
     dispatch(setNumOfPlays(0))
     setNewBoardClicked(3)
     dispatch(setWinningPieces(null))
     dispatch(agreeToResetGame(''))
     dispatch(setResetApproval(0))
+
+    setTimeout(() => {
+      dispatch(setDropPiecesOffBoard(0))
+      dispatch(setBoard(emptyBoard))
+      dispatch(setNoClickingForOneSecond(false))
+    }, 1000)
   }
 
   const handleBoardResetClick = () => {
@@ -263,25 +159,7 @@ const Game: FunctionComponent = () => {
 
   const handleResetRulesClick = () => {
     if (resetRulesClickedOnce) {
-      dispatch(setBoard(emptyBoard))
-      dispatch(setGameWon([false, '']))
-      dispatch(setPlayerOne(''))
-      dispatch(setPlayerTwo(''))
-      dispatch(setAmountToWin(''))
-      dispatch(setView('input'))
-      dispatch(setNumOfPlays(0))
-      dispatch(setWinningPieces(null))
-      dispatch(setOtherOnlinePlayerName(''))
-      dispatch(setResetApproval(0))
-      dispatch(agreeToResetGame(''))
-      dispatch(setLocalPlayer(''))
-      dispatch(setPlayerTurn(''))
-      dispatch(setRecievedOnlineColumnClicked(null))
-      dispatch(setPlayingOnlineOrNot(false))
-      dispatch(setRoomCode(''))
-      dispatch(setSecondPlayerRoomCode(''))
-      setResetRulesClickedOnce(false)
-      setUserLeftGame(false)
+      dispatch(setDefaultReduxState())
     } else {
       setResetRulesClickedOnce(true)
     }
@@ -350,3 +228,4 @@ const Game: FunctionComponent = () => {
 }
 
 export default Game
+
