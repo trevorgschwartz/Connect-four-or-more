@@ -20,7 +20,7 @@ const CreateOnlineGame: FunctionComponent = () => {
     return (
         <>
             { createGameView === 'enterName' && <CreateGameEnterName setCreateGameView={setCreateGameView} /> }
-            { createGameView === 'playGame' &&  <CreateGameRoomCode />}
+            { createGameView === 'getCode' &&  <CreateGameRoomCode />}
         </>
     )
 
