@@ -4,3 +4,4 @@ dist/*
 dist/bundle.js
 dist/index.html
 dist/report.html
+.DS_Store
