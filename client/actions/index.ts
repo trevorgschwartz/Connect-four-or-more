@@ -31,7 +31,7 @@ export const setBoard = (board: string[][]): AppActions => ({
     board
 })
 
-export const setGameWon = (array: [boolean, string[] | string]): AppActions => ({
+export const setGameWon = (array: [boolean, string[] | string, string[] | string]): AppActions => ({
     type: actions.setGameWon,
     array
 })
@@ -120,4 +120,42 @@ export const setDropPiecesOffBoard = (setting: number): AppActions => ({
 
 export const setDefaultReduxState = (): AppActions => ({
     type: actions.setDefaultReduxState
+})
+
+export const setSpeedPlay = (speedPlay: boolean): AppActions => ({
+    type: actions.setSpeedPlay,
+    speedPlay
+})
+
+export const setSpeedTimer = (time: number): AppActions => ({
+    type: actions.setSpeedTimer,
+    time
+})
+
+export const setStartSpeedPlay = (start: boolean): AppActions => ({
+    type: actions.setStartSpeedPlay,
+    start
+})
+
+export const setTimerRunningPlayerOne = (): AppActions => ({
+    type: actions.setTimerRunningPlayerOne
+})
+
+export const setTimerRunningPlayerTwo = (): AppActions => ({
+    type: actions.setTimerRunningPlayerTwo
+})
+
+export const setChangeTurnsDisabled = (number: number): AppActions => ({
+    type: actions.setChangeTurnsDisabled,
+    number
+})
+
+export const setReadyToPlay = (ready: boolean): AppActions => ({
+    type: actions.setReadyToPlay,
+    ready
+})
+
+export const setPlayerOneReadyToPlay = (ready: boolean): AppActions => ({
+    type: actions.setPlayerOneReadyToPlay,
+    ready
 })

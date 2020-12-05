@@ -1,3 +1,4 @@
+import { defaultCipherList } from 'constants'
 import { AppActions } from '../types/actions'
 import * as actions from '../types/actionStrings'
 import { emptyBoard } from '../utilities/gameLogicUtilities'
@@ -22,7 +23,7 @@ export const setAmountToWinReducer = (state = "", action: AppActions): string =>
     }
 }
 
-export const setGameWonReducer = (state: [boolean, string] = [false, ''], action: AppActions): [boolean, string[] | string] => {
+export const setGameWonReducer = (state: [boolean, string, string] = [false, '', ''], action: AppActions): [boolean, string[] | string, string[] | string] => {
     switch (action.type) {
         case actions.setGameWon:
             return action.array
@@ -116,6 +117,76 @@ export const setDropPiecesOffBoard = (state = 0, action: AppActions): number => 
     switch (action.type) {
         case actions.setDropPiecesOffBoard:
             return action.setting
+
+        default:
+            return state
+    }
+}
+
+export const setSpeedPlay = (state = false, action: AppActions): boolean => {
+    switch (action.type) {
+        case actions.setSpeedPlay:
+            return action.speedPlay
+
+        default:
+            return state
+    }
+}
+
+export const setSpeedGameTimer = (state = [NaN, NaN, NaN], action: AppActions): number[] => {
+    switch (action.type) {
+        case actions.setSpeedTimer:
+            return [action.time, action.time, action.time]
+
+        case actions.setTimerRunningPlayerOne:
+            if (state[0] > 0) {
+                return [state[0] - 1, state[1], state[2]]
+            } else return state
+
+        case actions.setTimerRunningPlayerTwo:
+            if (state[1] > 0) {
+                return [state[0], state[1] - 1, state[2]]
+            } else return state
+
+        default:
+            return state
+    }
+}
+
+export const startSpeedPlay = (state = false, action: AppActions): boolean => {
+    switch (action.type) {
+        case actions.setStartSpeedPlay:
+            return action.start
+
+        default:
+            return state
+    }
+}
+
+export const setChangeTurnsDisabled = (state = 0, action: AppActions): number => {
+    switch (action.type) {
+        case actions.setChangeTurnsDisabled:
+            return action.number
+        
+        default:
+            return state
+    }
+}
+
+export const setReadyToPlay = (state = false, action: AppActions) => {
+    switch (action.type) {
+        case actions.setReadyToPlay:
+            return action.ready
+        
+        default:
+            return state
+    }
+}
+
+export const setPlayerOneReadyToPlay = (state = false, action: AppActions) => {
+    switch (action.type) {
+        case actions.setPlayerOneReadyToPlay:
+            return action.ready
 
         default:
             return state

@@ -14,7 +14,13 @@ import {
     setWinningPiecesReducer,
     setNoClickingForOneSecondReducer,
     setNumOfPlaysReducer,
-    setDropPiecesOffBoard
+    setDropPiecesOffBoard,
+    setSpeedPlay,
+    setSpeedGameTimer,
+    startSpeedPlay,
+    setChangeTurnsDisabled,
+    setReadyToPlay,
+    setPlayerOneReadyToPlay
 } from './setGameLogic&RunningReducers'
 
 import {
@@ -55,7 +61,13 @@ const appReducer = combineReducers({
     otherPlayer: setOtherOnlinePlayerNameReducer,
     noClickingForOneSecond: setNoClickingForOneSecondReducer,
     numOfPlays: setNumOfPlaysReducer,
-    dropPiecesOffBoard: setDropPiecesOffBoard
+    dropPiecesOffBoard: setDropPiecesOffBoard,
+    speedPlay: setSpeedPlay,
+    speedTimer: setSpeedGameTimer,
+    startSpeedPlay: startSpeedPlay,
+    changeTurnsDisabled: setChangeTurnsDisabled,
+    readyToPlay: setReadyToPlay,
+    playerOneReadyToPlay: setPlayerOneReadyToPlay
 })
 
 const rootReducer: Reducer = (state: AppState, action: AppActions): AppState => {   

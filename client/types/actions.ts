@@ -32,7 +32,7 @@ interface SetBoard {
 
 interface SetGameWon {
     type: typeof actions.setGameWon
-    array: [boolean, string[] | string]
+    array: [boolean, string[] | string, string[] | string]
 }
 
 interface SetWinningPieces {
@@ -119,6 +119,44 @@ interface SetDefaultReduxState {
     type: typeof actions.setDefaultReduxState
 }
 
+interface SetSpeedPlay {
+    type: typeof actions.setSpeedPlay
+    speedPlay: boolean
+}
+
+interface SetSpeedTimer {
+    type: typeof actions.setSpeedTimer
+    time: number
+}
+
+interface SetStartSpeedPlay {
+    type: typeof actions.setStartSpeedPlay
+    start: boolean
+}
+
+interface SetTimerRunningPlayerOne {
+    type: typeof actions.setTimerRunningPlayerOne
+}
+
+interface SetTimerRunningPlayerTwo {
+    type: typeof actions.setTimerRunningPlayerTwo
+}
+
+interface SetChangeTurnsDisabled {
+    type: typeof actions.setChangeTurnsDisabled
+    number: number
+}
+
+interface SetReadyToPlay {
+    type: typeof actions.setReadyToPlay
+    ready: boolean
+}
+
+interface SetPlayerOneReadyToPlay {
+    type: typeof actions.setPlayerOneReadyToPlay
+    ready: boolean
+}
+
 export type AppActions = 
 HelloWorldAction | 
 SetViewAction | 
@@ -143,4 +181,12 @@ SetOtherOnlinePlayerName |
 SetNoClickingForOneSecond |
 SetNumOfPlays |
 SetDropPiecesOffBoard |
-SetDefaultReduxState
+SetDefaultReduxState |
+SetSpeedPlay |
+SetSpeedTimer |
+SetStartSpeedPlay |
+SetTimerRunningPlayerOne |
+SetTimerRunningPlayerTwo |
+SetChangeTurnsDisabled |
+SetReadyToPlay |
+SetPlayerOneReadyToPlay

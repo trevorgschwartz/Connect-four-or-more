@@ -12,9 +12,12 @@ const CreateOnlineGame: FunctionComponent = () => {
     const roomCode: string = useSelector((state: AppState) => state.roomCode)
     const playerOne: string = useSelector((state: AppState) => state.playerOne)
     const amountToWin: string = useSelector((state: AppState) => state.amountToWin)
+    const speedPlay = useSelector((state: AppState) => state.speedPlay)
+    const speedTimer = useSelector((state: AppState) => state.speedTimer[2])
     
     useEffect(() => {
-        if (roomCode.length) socket.emit('create-room', roomCode, playerOne, amountToWin)
+        if (roomCode.length) socket.emit('create-room', roomCode, playerOne, amountToWin, speedPlay, speedTimer)
+        console.log('playerOne', playerOne)
     }, [roomCode])
 
     return (
