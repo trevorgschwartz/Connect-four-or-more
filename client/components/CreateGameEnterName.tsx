@@ -11,10 +11,10 @@ interface LinkDispatchProps {
 
 const CreateGameEnterName:FunctionComponent<LinkDispatchProps> = ({ setCreateGameView }) => {
     
-    const playerOne: string[] | string = useSelector((state: AppState) => state.playerOne)
+    const playerOne: string[] = useSelector((state: AppState) => state.playerOne)
     const amountToWin: string = useSelector((state: AppState) => state.amountToWin)
     const speedPlay: boolean = useSelector((state: AppState) => state.speedPlay)
-    const speedTimer: number[] = useSelector((state: AppState) => state.speedTimer)
+    const speedTimer: string = useSelector((state: AppState) => state.speedTimer)
 
     const dispatch = useDispatch()
 
@@ -29,6 +29,15 @@ const CreateGameEnterName:FunctionComponent<LinkDispatchProps> = ({ setCreateGam
         e.preventDefault()
         dispatch(setSpeedPlay(!speedPlay))
       }
+
+    const handleSpeedPlayEntry = (e: ChangeEvent<HTMLInputElement>) => {
+    const re = /^[0-9\b]+$/;
+
+    if (e.target.value === '' || re.test(e.target.value)) {
+        dispatch(setSpeedTimer(e.target.value))
+    }
+
+    }
     
     return (
         <>
@@ -38,7 +47,7 @@ const CreateGameEnterName:FunctionComponent<LinkDispatchProps> = ({ setCreateGam
             <input className="createGameWinAmountInput LatoText" type="number" min="2" max="6" value={amountToWin} onChange={(e) => dispatch(setAmountToWin(e.target.value))}></ input>
             <button className='createOrJoinGameSubmitButton LatoText' onClick={handleCreateGameNameAndWinAmountSubmit}>Submit</button>
             <button className="createGameSpeedPlay LatoText" onClick={handleSpeedPlayButtonClick}>Speed Play?</button>
-            {speedPlay ? <input type="number" className="onlineSpeedPlay" placeholder='Enter Amount of Seconds for Each Player' value={speedTimer[0]} onChange={(e: ChangeEvent<HTMLInputElement>) => dispatch(setSpeedTimer(Number(e.target.value)))} /> : null}
+            {speedPlay ? <input type="number" min="2" max="10000" className="LatoText onlineSpeedPlay" placeholder='Enter Seconds' value={speedTimer[0]} onChange={handleSpeedPlayEntry} /> : null}
             
         </>
     )

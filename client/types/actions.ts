@@ -17,12 +17,12 @@ interface SetAmountToWin {
 
 interface SetPlayerOne {
     type: typeof actions.setPlayerOne
-    player1: string[] | string
+    player1: string[]
 }
 
 interface SetPlayerTwo {
     type: typeof actions.setPlayerTwo
-    player2: string[] | string
+    player2: string[]
 }
 
 interface SetBoard {
@@ -77,12 +77,12 @@ interface SetLocalRerenderCounter {
 
 interface SetPlayerTurn {
     type: typeof actions.setPlayerTurn
-    playerTurn: string[] | string
+    playerTurn: string[]
 }
 
 interface SetLocalPlayer {
     type: typeof actions.setLocalPlayer
-    player: string[] | string
+    player: string[]
 }
 
 interface SetAgreementToReset {
@@ -97,7 +97,7 @@ interface SetResetApproval {
 
 interface SetOtherOnlinePlayerName {
     type: typeof actions.setOtherOnlinePlayerName
-    player: string[] | string
+    player: string[]
 }
 
 interface SetNoClickingForOneSecond {
@@ -126,7 +126,7 @@ interface SetSpeedPlay {
 
 interface SetSpeedTimer {
     type: typeof actions.setSpeedTimer
-    time: number
+    time: string | number
 }
 
 interface SetStartSpeedPlay {

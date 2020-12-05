@@ -16,12 +16,12 @@ export const setAmountToWin = (newString: string): AppActions => ({
     newString
 })
 
-export const setPlayerOne = (player1: string[] | string): AppActions => ({
+export const setPlayerOne = (player1: string[]): AppActions => ({
     type: actions.setPlayerOne,
     player1
 })
 
-export const setPlayerTwo = (player2: string[] | string): AppActions => ({
+export const setPlayerTwo = (player2: string[]): AppActions => ({
     type: actions.setPlayerTwo,
     player2
 })
@@ -78,12 +78,12 @@ export const setLocalRerenderCounter = (counter: number): AppActions => ({
     counter
 })
 
-export const setPlayerTurn = (playerTurn: string[] | string): AppActions => ({
+export const setPlayerTurn = (playerTurn: string[]): AppActions => ({
     type: actions.setPlayerTurn,
     playerTurn
 })
 
-export const setLocalPlayer = (player: string[] | string): AppActions => ({
+export const setLocalPlayer = (player: string[]): AppActions => ({
     type: actions.setLocalPlayer,
     player
 })
@@ -98,7 +98,7 @@ export const setResetApproval = (number: number): AppActions => ({
     number
 })
 
-export const setOtherOnlinePlayerName = (player: string[] | string): AppActions => ({
+export const setOtherOnlinePlayerName = (player: string[]): AppActions => ({
     type: actions.setOtherOnlinePlayerName,
     player
 })
@@ -127,7 +127,7 @@ export const setSpeedPlay = (speedPlay: boolean): AppActions => ({
     speedPlay
 })
 
-export const setSpeedTimer = (time: number): AppActions => ({
+export const setSpeedTimer = (time: string | number): AppActions => ({
     type: actions.setSpeedTimer,
     time
 })

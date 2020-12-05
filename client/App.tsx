@@ -37,13 +37,13 @@ const App: React.FC = () => {
         dispatch(setOnlineRerenderCounter(onlineRerenderCounter))
     })
 
-    socket.on('second-player-joined', (player1: string, player2: string, roomCode: string) => {
+    socket.on('second-player-joined', (player1: string, player2: string[], roomCode: string) => {
         dispatch(setPlayerTwo(player2))
         dispatch(setOtherOnlinePlayerName(player2))
         socket.emit('send-playerOne-name', player1, roomCode)
     })
 
-    socket.on('get-playerOne-name', (player1: string, amountToWinFromOnline: string, speedPlay: boolean, speedTimer: number, playerOneReady: boolean) => {
+    socket.on('get-playerOne-name', (player1: string[], amountToWinFromOnline: string, speedPlay: boolean, speedTimer: number, playerOneReady: boolean) => {
         dispatch(setPlayerOne(player1))
         dispatch(setOtherOnlinePlayerName(player1))
         dispatch(setAmountToWin(amountToWinFromOnline))

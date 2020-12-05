@@ -6,7 +6,7 @@ import { setPlayerTwo, setLocalPlayer, setSecondPlayerRoomCode, setView, setRead
 const JoinOnlineGame: FunctionComponent = () => {
     const [localRoomCode, setLocalRoomCode] = useState('')
 
-    const playerTwo: string[] | string = useSelector((state: AppState) => state.playerTwo)
+    const playerTwo: string[] = useSelector((state: AppState) => state.playerTwo)
 
     const dispatch = useDispatch()
 
