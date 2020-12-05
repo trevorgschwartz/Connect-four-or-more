@@ -10,7 +10,8 @@
     "clean": "rm dist/bundle.js",
     "dev": "webpack -d -w --mode development & nodemon server/index.ts",
     "build-prod": "webpack -p --mode production",
-    "start": "ts-node server/index.ts"
+    "start": "ts-node server/index.ts",
+    "heroku-postbuild": "webpack -p --mode production"
   },
   "dependencies": {
     "@types/body-parser": "^1.19.0",
