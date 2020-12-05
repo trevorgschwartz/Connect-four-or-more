@@ -1,34 +1,35 @@
 import React, { FunctionComponent, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { AppState } from '../index'
+import { setDropPiecesOffBoard } from '../actions/index'
 import socket from '../utilities/socketConnection'
 
 interface LinkStateProp{
     column: number
     slot: string
-    dropPieces: number
 }
 
 interface LinkDispatchProp{
-    placePiece: (column: number) => void,
-    setDropPieces: (num: number) => void
+    placePiece: (column: number) => void
 }
 
 type Props = LinkDispatchProp & LinkStateProp
 
+const Slot:FunctionComponent<Props> = ({ column, slot, placePiece }) => {
 
-const Slot:FunctionComponent<Props> = ({ column, slot, dropPieces, placePiece, setDropPieces }) => {
+  
+  const playingOnlineOrNot: boolean = useSelector((state: AppState) => state.playingOnlineOrNot)
+  const receivedOnlineColumn: number | null = useSelector((state: AppState) => state.receivedOnlineColumn)
+  const onlineRerenderCounter: number = useSelector((state: AppState) => state.onlineRerenderCounter)
+  const roomCode: string = useSelector((state: AppState) => state.roomCode)
+  const secondPlayerRoomCode: string = useSelector((state: AppState) => state.secondPlayerRoomCode)
+  const playerTurn: string[] = useSelector((state: AppState) => state.playerTurn)
+  const localPlayer: string[] = useSelector((state: AppState) => state.localPlayer)
+  const otherPlayer: string[] = useSelector((state: AppState) => state.otherPlayer)
+  const noClickingForOneSecond: boolean = useSelector((state: AppState) => state.noClickingForOneSecond)
+  const dropPiecesOffBoard: number = useSelector((state: AppState) => state.dropPiecesOffBoard)
 
-  const {
-    playingOnlineOrNot,
-    receivedOnlineColumn,
-    onlineRerenderCounter,
-    roomCode,
-    secondPlayerRoomCode,
-    playerTurn,
-    localPlayer,
-    otherPlayer
-  } = useSelector((state: AppState) => state)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (receivedOnlineColumn !== null) {
@@ -37,23 +38,25 @@ const Slot:FunctionComponent<Props> = ({ column, slot, dropPieces, placePiece, s
   }, [onlineRerenderCounter])
 
   const handleClick = () => {
-    if (!playingOnlineOrNot) {
-      placePiece(column)
-    } else if (playerTurn[0] === localPlayer[0] && otherPlayer[0]) {
+    if (!noClickingForOneSecond) {
+      if (!playingOnlineOrNot) {
         placePiece(column)
-        socket.emit('send-move', column, roomCode || secondPlayerRoomCode)
+      } else if (playerTurn[0] === localPlayer[0] && otherPlayer[0]) {
+          placePiece(column)
+          socket.emit('send-move', column, roomCode || secondPlayerRoomCode)
+      }
     }
   }
 
   const handleAnimationEnd = () => {
-    if (dropPieces) {
-      setDropPieces(0)
+    if (dropPiecesOffBoard) {
+      dispatch(setDropPiecesOffBoard(0))
     }
   }
 
   return (
     <div onClick={handleClick}>
-      <div data-droppieces={dropPieces} className={`circle${slot}`} onAnimationEnd={handleAnimationEnd}></div>
+      <div data-droppieces={dropPiecesOffBoard} className={`circle${slot}`} onAnimationEnd={handleAnimationEnd}></div>
       <div className="circleWhite"></div>
     </div>
   )

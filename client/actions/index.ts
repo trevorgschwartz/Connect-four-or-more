@@ -1,6 +1,5 @@
 import * as actions from '../types/actionStrings'
 import { AppActions } from '../types/actions'
-// import { Board } from '../types/index'
 
 export const addToHelloWorld = (newString: string): AppActions => ({
     type: actions.addToHelloWorld,
@@ -32,7 +31,7 @@ export const setBoard = (board: string[][]): AppActions => ({
     board
 })
 
-export const setGameWon = (array: [boolean, string[] | string]): AppActions => ({
+export const setGameWon = (array: [boolean, string[] | string, string[] | string]): AppActions => ({
     type: actions.setGameWon,
     array
 })
@@ -94,7 +93,7 @@ export const agreeToResetGame = (player: string): AppActions => ({
     player
 })
 
-export const setResetApproval = (number: number) : AppActions => ({
+export const setResetApproval = (number: number): AppActions => ({
     type: actions.setResetApproval,
     number
 })
@@ -102,4 +101,61 @@ export const setResetApproval = (number: number) : AppActions => ({
 export const setOtherOnlinePlayerName = (player: string[] | string): AppActions => ({
     type: actions.setOtherOnlinePlayerName,
     player
+})
+
+export const setNoClickingForOneSecond = (clickOrNot: boolean): AppActions => ({
+    type: actions.setNoClickingForOneSecond,
+    clickOrNot
+})
+
+export const setNumOfPlays = (number: number): AppActions => ({
+    type: actions.setNumOfPlays,
+    number
+})
+
+export const setDropPiecesOffBoard = (setting: number): AppActions => ({
+    type: actions.setDropPiecesOffBoard,
+    setting
+})
+
+export const setDefaultReduxState = (): AppActions => ({
+    type: actions.setDefaultReduxState
+})
+
+export const setSpeedPlay = (speedPlay: boolean): AppActions => ({
+    type: actions.setSpeedPlay,
+    speedPlay
+})
+
+export const setSpeedTimer = (time: number): AppActions => ({
+    type: actions.setSpeedTimer,
+    time
+})
+
+export const setStartSpeedPlay = (start: boolean): AppActions => ({
+    type: actions.setStartSpeedPlay,
+    start
+})
+
+export const setTimerRunningPlayerOne = (): AppActions => ({
+    type: actions.setTimerRunningPlayerOne
+})
+
+export const setTimerRunningPlayerTwo = (): AppActions => ({
+    type: actions.setTimerRunningPlayerTwo
+})
+
+export const setChangeTurnsDisabled = (number: number): AppActions => ({
+    type: actions.setChangeTurnsDisabled,
+    number
+})
+
+export const setReadyToPlay = (ready: boolean): AppActions => ({
+    type: actions.setReadyToPlay,
+    ready
+})
+
+export const setPlayerOneReadyToPlay = (ready: boolean): AppActions => ({
+    type: actions.setPlayerOneReadyToPlay,
+    ready
 })

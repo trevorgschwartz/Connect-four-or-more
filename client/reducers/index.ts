@@ -1,4 +1,7 @@
-import { combineReducers } from 'redux'
+import { combineReducers, Reducer } from 'redux'
+import * as actions from '../types/actionStrings'
+import { AppActions } from '../types/actions'
+import { AppState } from '../index'
 
 import { 
     setAmountToWinReducer,
@@ -8,7 +11,16 @@ import {
     setOnlineRerenderCounterReducer,
     setAgreementToResetReducer,
     setResetApprovalReducer,
-    setWinningPiecesReducer
+    setWinningPiecesReducer,
+    setNoClickingForOneSecondReducer,
+    setNumOfPlaysReducer,
+    setDropPiecesOffBoard,
+    setSpeedPlay,
+    setSpeedGameTimer,
+    startSpeedPlay,
+    setChangeTurnsDisabled,
+    setReadyToPlay,
+    setPlayerOneReadyToPlay
 } from './setGameLogic&RunningReducers'
 
 import {
@@ -29,7 +41,7 @@ import {
 } from './setRoomCodesReducers'
 
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
     view: setViewReducer,
     amountToWin: setAmountToWinReducer,
     playerOne: setPlayerOneReducer,
@@ -46,7 +58,22 @@ const rootReducer = combineReducers({
     localPlayer: setLocalPlayer,
     agreeToReset: setAgreementToResetReducer,
     resetApproval: setResetApprovalReducer,
-    otherPlayer: setOtherOnlinePlayerNameReducer
+    otherPlayer: setOtherOnlinePlayerNameReducer,
+    noClickingForOneSecond: setNoClickingForOneSecondReducer,
+    numOfPlays: setNumOfPlaysReducer,
+    dropPiecesOffBoard: setDropPiecesOffBoard,
+    speedPlay: setSpeedPlay,
+    speedTimer: setSpeedGameTimer,
+    startSpeedPlay: startSpeedPlay,
+    changeTurnsDisabled: setChangeTurnsDisabled,
+    readyToPlay: setReadyToPlay,
+    playerOneReadyToPlay: setPlayerOneReadyToPlay
 })
+
+const rootReducer: Reducer = (state: AppState, action: AppActions): AppState => {   
+    if(action.type === actions.setDefaultReduxState) state = undefined
+    
+    return appReducer(state, action);
+ }
 
 export default rootReducer
