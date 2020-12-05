@@ -1,7 +1,7 @@
 import React, { useState, FunctionComponent } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppState } from '../index'
-import { setPlayerTwo, setLocalPlayer, setSecondPlayerRoomCode, setView } from '../actions/index'
+import { setPlayerTwo, setLocalPlayer, setSecondPlayerRoomCode, setView, setReadyToPlay } from '../actions/index'
 
 const JoinOnlineGame: FunctionComponent = () => {
     const [localRoomCode, setLocalRoomCode] = useState('')
@@ -14,6 +14,7 @@ const JoinOnlineGame: FunctionComponent = () => {
         dispatch(setLocalPlayer(playerTwo))
         dispatch(setSecondPlayerRoomCode(localRoomCode))
         dispatch(setView('game'))
+        dispatch(setReadyToPlay(true))
     }
 
     return (

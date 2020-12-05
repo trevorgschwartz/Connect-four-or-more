@@ -17,20 +17,25 @@ import {
   setNoClickingForOneSecond,
   setNumOfPlays,
   setDropPiecesOffBoard,
-  setDefaultReduxState } from '../actions/index'
+  setDefaultReduxState,
+  setStartSpeedPlay,
+  setSpeedTimer,
+  setChangeTurnsDisabled,
+  setReadyToPlay } from '../actions/index'
+
 
 const Game: FunctionComponent = () => {
 
   const [toCheck, setToCheck] = useState([0, 0])
   const [newBoardClicked, setNewBoardClicked] = useState(0)
-  const [changeTurnsDisabled, setChangeTurnsDisabled] = useState(0)
+  // const [changeTurnsDisabled, setChangeTurnsDisabled] = useState(0)
   const [resetRulesClickedOnce, setResetRulesClickedOnce] = useState(false)
   const [userLeftGame, setUserLeftGame] = useState(false)
   
   const winningPieces: number[][] = useSelector((state: AppState) => state.winningPieces)
   const amountToWin: string = useSelector((state: AppState) => state.amountToWin)
   const board: string[][] = useSelector((state: AppState) => state.board)
-  const gameWon: [boolean, string] = useSelector((state: AppState) => state.gameWon)
+  const gameWon = useSelector((state: AppState) => state.gameWon)
   const playerOne: string[] = useSelector((state: AppState) => state.playerOne)
   const playerTwo: string[] = useSelector((state: AppState) => state.playerTwo)
   const playerTurn: string[] = useSelector((state: AppState) => state.playerTurn)
@@ -42,20 +47,26 @@ const Game: FunctionComponent = () => {
   const resetApproval: number = useSelector((state: AppState) => state.resetApproval)
   const otherPlayer: string[] = useSelector((state: AppState) => state.otherPlayer)
   const numOfPlays: number = useSelector((state: AppState) => state.numOfPlays)
+  const playerOneTime: number = useSelector((state: AppState) => state.speedTimer[0])
+  const playerTwoTime: number = useSelector((state: AppState) => state.speedTimer[1])
+  const originalTime: number = useSelector((state: AppState) => state.speedTimer[2])
+  const startSpeedPlay: boolean = useSelector((state: AppState) => state.startSpeedPlay)
+  const speedPlay: boolean = useSelector((state: AppState) => state.speedPlay)
+  const changeTurnsDisabled: boolean = useSelector((state: AppState) => state.changeTurnsDisabled)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    socket.on('reset-board', (playerOne: string[]) => {
-      resetBoard(playerOne)
+    socket.on('reset-board', (playerOne: string[], timer: number) => {
+      resetBoard(playerOne, timer)
     })
 
-    socket.on('reset-unfinished-board', (player: string[], agreeToReset: string, player1: string[]) => {
+    socket.on('reset-unfinished-board', (player: string[], agreeToReset: string, player1: string[], timer: number) => {
       if (agreeToReset.length === 0) {
         dispatch(agreeToResetGame(player[0]))
         dispatch(setResetApproval(1))
       } else if (player) {
-        resetBoard(player1)
+        resetBoard(player1, timer)
       }
     })
 
@@ -78,15 +89,23 @@ const Game: FunctionComponent = () => {
     
     if (possibleWinningPieces.length > 0) {
       dispatch(setWinningPieces(possibleWinningPieces))
-      playerTurn === playerOne ? dispatch(setGameWon([true, playerTwo])) : dispatch(setGameWon([true, playerOne]))
+      playerTurn === playerOne ? dispatch(setGameWon([true, playerTwo, playerOne])) : dispatch(setGameWon([true, playerOne, playerTwo]))
     }
     
-    if (numOfPlays === 42) dispatch(setGameWon([true, 'Tie']))
+    if (numOfPlays === 42) dispatch(setGameWon([true, 'Tie', '']))
   }, [toCheck])
 
+  // useEffect(() => {
+  //   if (gameWon[0]) {
+  //     dispatch(setSpeedTimer(originalTime))
+  //     dispatch(setStartSpeedPlay(false))
+  //     dispatch(setReadyToPlay(false))
+  //   }
+  // }, [gameWon, originalTime])
+
   useEffect(() => {
-    if (numOfPlays !== 0) setChangeTurnsDisabled(1)
-    else setChangeTurnsDisabled(0)
+    if (numOfPlays !== 0) dispatch(setChangeTurnsDisabled(1))
+    else dispatch(setChangeTurnsDisabled(0))
   }, [numOfPlays])
   
   useEffect(() => {
@@ -101,8 +120,26 @@ const Game: FunctionComponent = () => {
     }
   }, [winningPieces])
 
+  useEffect(() => {
+    if (playerOneTime === 0) dispatch(setGameWon([true, playerTwo, playerOne]))
+  }, [playerOneTime])
+  
+  useEffect(() => {
+    if (playerTwoTime === 0) dispatch(setGameWon([true, playerOne, playerTwo]))
+  }, [playerTwoTime])
+
   const placePiece = (column: number) => {
-    if (!gameWon[0]) {
+    if (!gameWon[0] && startSpeedPlay) {
+      for (let i = board.length - 1; i >= 0; i--) {
+        if (board[i][column] === "O") {
+          dispatch(setBoard(copyBoardAndPlacePiece(board, playerTurn, column, i)))
+          dispatch(setPlayerTurn(changePlayerTurn(playerTurn, playerOne, playerTwo)))
+          setToCheck([i, column])
+          dispatch(setNumOfPlays(numOfPlays + 1))
+          break;
+        }
+      }
+    } else if (!gameWon[0] && !speedPlay) {
       for (let i = board.length - 1; i >= 0; i--) {
         if (board[i][column] === "O") {
           dispatch(setBoard(copyBoardAndPlacePiece(board, playerTurn, column, i)))
@@ -115,16 +152,19 @@ const Game: FunctionComponent = () => {
     }
   }
   
-  const resetBoard = (player: string[] = playerOne) => {
+  const resetBoard = (player: string[] = playerOne, timer: number) => {
     dispatch(setNoClickingForOneSecond(true))
     dispatch(setPlayerTurn(player))
     dispatch(setDropPiecesOffBoard(3))
-    dispatch(setGameWon([false, '']))
+    dispatch(setGameWon([false, '', '']))
     dispatch(setNumOfPlays(0))
     setNewBoardClicked(3)
     dispatch(setWinningPieces(null))
     dispatch(agreeToResetGame(''))
     dispatch(setResetApproval(0))
+    dispatch(setStartSpeedPlay(false))
+    dispatch(setSpeedTimer(timer))
+    dispatch(setReadyToPlay(true))
 
     setTimeout(() => {
       dispatch(setDropPiecesOffBoard(0))
@@ -137,23 +177,25 @@ const Game: FunctionComponent = () => {
     if (playingOnlineOrNot) {
       if (gameWon[0]) {
         socket.emit('reset-board', playerOne, roomCode || secondPlayerRoomCode)
-        resetBoard()
+        resetBoard(playerOne, originalTime)
       } else {
-        if (!agreeToReset && numOfPlays) {
+        if (!agreeToReset) {
           socket.emit('reset-unfinished-board', localPlayer, agreeToReset, playerOne, roomCode || secondPlayerRoomCode)
+
           dispatch(agreeToResetGame(localPlayer[0]))
           dispatch(setResetApproval(1))
-        } else if (agreeToReset !== localPlayer[0] && numOfPlays) {
+        } else if (agreeToReset !== localPlayer[0]) {
           socket.emit('reset-unfinished-board', localPlayer, agreeToReset, playerOne, roomCode || secondPlayerRoomCode)
-          resetBoard()
-        } else if (agreeToReset === localPlayer[0] && numOfPlays) {
+
+          resetBoard(playerOne, originalTime)
+        } else if (agreeToReset === localPlayer[0]) {
           socket.emit('cancel-agree-to-reset', roomCode || secondPlayerRoomCode)
           dispatch(agreeToResetGame(''))
           dispatch(setResetApproval(0))
         }
       }
     } else {
-      resetBoard()
+      resetBoard(playerOne, originalTime)
     }
   }
 
@@ -176,13 +218,18 @@ const Game: FunctionComponent = () => {
   }
 
   const handleChangeTurnsClick = () => {
-    if (numOfPlays === 0) {
+    if (numOfPlays === 0 && !startSpeedPlay) {
       let copyPlayerTurn = playerOne.slice()
       dispatch(setPlayerOne(playerTwo.slice()))
       dispatch(setPlayerTwo(copyPlayerTurn))
       if (playingOnlineOrNot) {
         socket.emit('change-turns', roomCode || secondPlayerRoomCode, playerOne, playerTwo)
       }
+
+      // if (playingOnlineOrNot && speedPlay) {
+      // dispatch(setSpeedTimer(originalTime))
+      // socket.emit('change-turns-new-timer', roomCode || secondPlayerRoomCode, originalTime)
+      // }
     }
   }
 

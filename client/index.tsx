@@ -7,7 +7,6 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import rootReducer from './reducers/index'
 import { AppActions } from './types/actions'
 
-
 import App from './App';
 import "./styles.scss";
 

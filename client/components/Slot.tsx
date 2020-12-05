@@ -15,7 +15,6 @@ interface LinkDispatchProp{
 
 type Props = LinkDispatchProp & LinkStateProp
 
-
 const Slot:FunctionComponent<Props> = ({ column, slot, placePiece }) => {
 
   

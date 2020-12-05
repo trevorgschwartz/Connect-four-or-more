@@ -9,5 +9,6 @@ export const changePlayerTurn = (playerTurn: string[], player1: string[], player
 export const copyBoardAndPlacePiece = (board: string[][], playerTurn: string[], column: number, i: number) => {
     let newBoard = board.map(row => row.slice())
     newBoard[i][column] = playerTurn[1]
+    
     return newBoard
 }
