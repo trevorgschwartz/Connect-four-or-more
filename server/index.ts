@@ -25,7 +25,7 @@ io.on('connection', (socket) => {
         socket.join(roomCode)
 
         if (!rooms.hasOwnProperty(roomCode)) rooms[roomCode] = {}
-
+        console.log('playerName', playerName)
         rooms[roomCode]['users'] = { [socket.id]: 'playerOne' }
         rooms[roomCode]['names'] = { playerOne : playerName }
         rooms[roomCode]['amountToWin'] = amountToWin
@@ -36,7 +36,6 @@ io.on('connection', (socket) => {
     socket.on('join-room', (roomCode: string, playerName) => {
 
         socket.join(roomCode)
-        
         rooms[roomCode]['users'][socket.id] = 'playerTwo'
         rooms[roomCode]['names'].playerTwo = playerName
         socket.to(roomCode).emit('second-player-joined', rooms[roomCode]['names'].playerOne, playerName, roomCode)

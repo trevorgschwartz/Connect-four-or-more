@@ -33,7 +33,7 @@ export const setGameWonReducer = (state: [boolean, string, string] = [false, '',
     }
 }
 
-export const setPlayerTurnReducer = (state = '', action: AppActions): string[] | string => {
+export const setPlayerTurnReducer = (state = ['', ''], action: AppActions): string[] => {
     switch (action.type) {
         case actions.setPlayerTurn:
             return action.playerTurn
@@ -133,21 +133,17 @@ export const setSpeedPlay = (state = false, action: AppActions): boolean => {
     }
 }
 
-export const setSpeedGameTimer = (state = [NaN, NaN, NaN], action: AppActions): number[] => {
+export const setSpeedGameTimer = (state = ['', '', ''], action: AppActions): (number | string)[] => {
     switch (action.type) {
         case actions.setSpeedTimer:
-            return [action.time, action.time, action.time]
+            return [Number(action.time), Number(action.time), Number(action.time)]
 
         case actions.setTimerRunningPlayerOne:
-            if (state[0] > 0) {
-                return [state[0] - 1, state[1], state[2]]
-            } else return state
-
+            if (typeof state[0] === 'number' && state[0] > 0) return [Number(state[0]) - 1, Number(state[1]), Number(state[2])]
+            
         case actions.setTimerRunningPlayerTwo:
-            if (state[1] > 0) {
-                return [state[0], state[1] - 1, state[2]]
-            } else return state
-
+            if (typeof state[1] === 'number' && state[1] > 0) return [Number(state[0]), Number(state[1]) - 1, Number(state[2])]
+            
         default:
             return state
     }

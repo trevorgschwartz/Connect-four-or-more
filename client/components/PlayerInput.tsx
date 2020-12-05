@@ -16,9 +16,6 @@ const PlayerInput: FunctionComponent = () => {
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     dispatch(setView('game'))
-  
-    // if (!speedPlay) dispatch(setStartSpeedPlay(true))
-    //** this conditional is to make the code for preventing a play before starting the speed timer more concise */
   }
 
   const handleOnlineClick = () => {
@@ -31,6 +28,15 @@ const PlayerInput: FunctionComponent = () => {
     dispatch(setSpeedPlay(!speedPlay))
   }
 
+  const handleSpeedPlayEntry = (e: ChangeEvent<HTMLInputElement>) => {
+    const re = /^[0-9\b]+$/;
+
+    if (e.target.value === '' || re.test(e.target.value)) {
+      dispatch(setSpeedTimer(e.target.value))
+    }
+
+  }
+
   return (
     <div className='inputs'>
       <form  onSubmit={handleFormSubmit} className="banner1 LatoText">
@@ -41,7 +47,7 @@ const PlayerInput: FunctionComponent = () => {
         <label >Win Amount</label>
           <input className="LatoText" type="number" min="2" max="6" value={amountToWin} onChange={(e: ChangeEvent<HTMLInputElement>) => dispatch(setAmountToWin(e.target.value))} />
         <button className="LatoText" onClick={handleSpeedPlayButtonClick}>Speed Play?</button>
-        {speedPlay ? <input type="number" className="speedPlay" placeholder='Enter Amount of Seconds for Each Player' value={speedTimer[0]} onChange={(e: ChangeEvent<HTMLInputElement>) => dispatch(setSpeedTimer(Number(e.target.value)))} /> : null}
+        {speedPlay ? <input type="number" min="2" max="10000" className="LatoText" placeholder='Enter Amount of Seconds for Each Player' value={speedTimer[0]} onChange={handleSpeedPlayEntry} /> : null}
         <input type="submit" className="LatoText localFormSubmit"/>
       </form>
         <button className=" playOnline LatoText" onClick={handleOnlineClick}>Play Online</button>

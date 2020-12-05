@@ -28,7 +28,6 @@ const Game: FunctionComponent = () => {
 
   const [toCheck, setToCheck] = useState([0, 0])
   const [newBoardClicked, setNewBoardClicked] = useState(0)
-  // const [changeTurnsDisabled, setChangeTurnsDisabled] = useState(0)
   const [resetRulesClickedOnce, setResetRulesClickedOnce] = useState(false)
   const [userLeftGame, setUserLeftGame] = useState(false)
   
@@ -94,14 +93,6 @@ const Game: FunctionComponent = () => {
     
     if (numOfPlays === 42) dispatch(setGameWon([true, 'Tie', '']))
   }, [toCheck])
-
-  // useEffect(() => {
-  //   if (gameWon[0]) {
-  //     dispatch(setSpeedTimer(originalTime))
-  //     dispatch(setStartSpeedPlay(false))
-  //     dispatch(setReadyToPlay(false))
-  //   }
-  // }, [gameWon, originalTime])
 
   useEffect(() => {
     if (numOfPlays !== 0) dispatch(setChangeTurnsDisabled(1))
@@ -225,11 +216,6 @@ const Game: FunctionComponent = () => {
       if (playingOnlineOrNot) {
         socket.emit('change-turns', roomCode || secondPlayerRoomCode, playerOne, playerTwo)
       }
-
-      // if (playingOnlineOrNot && speedPlay) {
-      // dispatch(setSpeedTimer(originalTime))
-      // socket.emit('change-turns-new-timer', roomCode || secondPlayerRoomCode, originalTime)
-      // }
     }
   }
 
@@ -259,7 +245,7 @@ const Game: FunctionComponent = () => {
           <button onClick={handleBoardResetClick}  className="button1 LatoText2">{otherPlayer[0]} requested Reset</button>
           : null
         }
-        <button onClick={handleChangeTurnsClick} className="button2 LatoText2" id='buttonTransparency' data-changeTurnsDisabled={changeTurnsDisabled}>Change Turns</button>
+        <button onClick={handleChangeTurnsClick} className="button2 LatoText2" id='buttonTransparency' data-changeturnsdisabled={changeTurnsDisabled}>Change Turns</button>
         { !resetRulesClickedOnce && <button onClick={handleResetRulesClick} className="button3 LatoText2">Reset Rules</button> }
         { resetRulesClickedOnce && <button onClick={handleCancelResetRulesClick} className="button3 LatoText2">Cancel Rules Reset</button> }
         { resetRulesClickedOnce && <button onClick={handleResetRulesClick} className="button4 LatoText2">Confirm Rules Reset?</button> }

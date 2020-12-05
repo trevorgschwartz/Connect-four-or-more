@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { setTimerRunningPlayerOne } from "../actions"
 import { AppState } from '../index'
@@ -8,13 +8,22 @@ const SpeedGameTimerPlayerOne: FunctionComponent = () => {
     
     const speedTimer: number[] = useSelector((state: AppState) => state.speedTimer)
     const player: string = useSelector((state: AppState) => state.playerOne[0])
+    const playerTurn = useSelector((state: AppState) => state.playerTurn)
     const gameWon = useSelector((state: AppState) => state.gameWon)
 
     const dispatch = useDispatch()
+
+    const [isRunning, setIsRunning] = useState(true)
+
+    useEffect(() => {
+      if (playerTurn[0] !== player) setIsRunning(false)
+      if (playerTurn[0] === player) setIsRunning(true)
+      if (gameWon[0]) setIsRunning(false)
+    }, [player, playerTurn, gameWon])
     
     useInterval(() => {
       dispatch(setTimerRunningPlayerOne())
-    }, 1000, player);
+    }, isRunning ? 1000 : null);
 
     return (
       <>
@@ -27,10 +36,10 @@ const SpeedGameTimerPlayerOne: FunctionComponent = () => {
           : null
         }
         {!gameWon[0] ?
-            <div className='timeLeft'>Time Left: {speedTimer[0]}</div>
+            <div className='timeLeft'>Time Left: {speedTimer[0]} seconds</div>
             : 
             gameWon[1] && speedTimer[0] !== 0 ?
-            <div className='timeLeft'>Time Left: {speedTimer[0]}</div>
+            <div className='timeLeft'>Time Left: {speedTimer[0]} seconds</div>
             : gameWon[1] && speedTimer[0] === 0 ?
             <div className='timeLeft'>You ran out of time!</div>
             : null
