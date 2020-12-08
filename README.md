@@ -2,7 +2,7 @@
 
 [Live Version](https://connect-four-or-more.herokuapp.com/)
 
-![](Connect-4-or-more.gif)
+![](readme-files/Connect-4-or-more.gif)
 
 ## Getting Started
 ```
