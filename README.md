@@ -15,8 +15,18 @@ A multiplayer connect4 game playable locally and online.  Players have the optio
 ---
 
 ## Getting Started
+>*Install dependencies*
 ```
 npm install
-npm build
+```
+>*Run webpack build*
+```
+npm run build-prod
+```
+>*Start the server*
+```
 npm start
 ```
+Open http://localhost:8080` in your browser
+
+---
