@@ -19,7 +19,7 @@ A multiplayer connect4 game playable locally and online.  Players have the optio
 ```
 npm install
 ```
->*Run webpack build*
+>*Webpack*
 ```
 npm run build-prod
 ```
