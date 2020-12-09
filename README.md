@@ -58,3 +58,7 @@ To return to the main page to re-enter names or change the game rules click "Res
 To start a game online click "Play Online" from the main page.  One player must first create a game by clicking "Create Game", enter their name (and choose the rules just as with local play), and click "Submit".  The player will be given a game code which they will need to communicate to the second player.  The second player needs to click "Play Online" from the main page and then click "Join Game".  Enter your name and the game code, click submit, and you will join the game.
 
 The rules of the game are the same as local play.  The sole change is that resetting the board mid-game requires both players clicking "Reset Board". When one player clicks "Reset Board" the second player will see a prompt on this button telling them that the first player has requested a reset.
+
+<img src="readme-files/connect-4-or-more4.gif" width="600">
+
+<img src="readme-files/connect-4-or-more5.gif" width="600">
