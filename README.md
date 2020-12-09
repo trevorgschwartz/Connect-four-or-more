@@ -61,4 +61,6 @@ The rules of the game are the same as local play.  The sole change is that reset
 
 <img src="readme-files/connect-4-or-more4.gif" width="600">
 
+---
+
 <img src="readme-files/connect-4-or-more5.gif" width="600">
