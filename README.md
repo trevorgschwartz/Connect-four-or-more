@@ -49,6 +49,8 @@ To change which player is starts a game, click "Change Turns", but this is only 
 
 To return to the main page to re-enter names or change the game rules click "Reset Rules".
 
+<img src="readme-files/connect-4-or-more3.gif" width="600">
+
 ---
 
 ## Online Play
