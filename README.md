@@ -14,6 +14,17 @@ A multiplayer connect4 game playable locally and online.  Players have the optio
 
 ---
 
+## Tech-Stack
+- [React](https://reactjs.org/)
+- [Redux](https://redux.js.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [socket.io](https://socket.io/)
+- [Node.js](nodejs.org)
+- [Express](http://expressjs.com/)
+- [Sass](https://sass-lang.com/)
+
+---
+
 ## Getting Started
 >*Install dependencies*
 ```
